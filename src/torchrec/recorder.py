@@ -15,7 +15,14 @@ from .nodes import BaseNode, TensorNode, ParamNode, OpNode, LayerNode
 
 class Recorder(object):
 
-    """Record and store execution graph info"""
+    """Record and store execution graph info
+
+    A `Recorder` object stores:
+        * a set of objects (`fn`s) that contain recordable information
+        * a mapping of object to their corresponding `BaseNodes` which will be used to store information
+        * a count of `fn`s by type for naming
+        * a set of edges, each a pair of objects that are linked by a computation
+    """
 
     def __init__(self):
         self.nodes = OrderedDict()
@@ -26,10 +33,34 @@ class Recorder(object):
         self._create_dummy()
 
     def _create_dummy(self):
+        """Construct a dummy node as the context for the recording graph.
+
+        Adds a dummy node (mapped to `None`) to the recording graph as the
+        context.  This node has the least depth (-1); is its own parent, and
+        will have only one child: the network whose execution is to be
+        recorded.
+
+        :returns:   `None`
+
+        """
         self.node_set.add(None)
         self.nodes[None] = BaseNode(fn=None, depth=-1, parent=None, name="ContextDummy")
 
     def add_node(self, net, depth=0, parent=None, name=None):
+        """Construct a node of recording graph.
+
+        Construct a node that will store information related to `net`
+        as the neural network is run.
+
+        :net:       Object whose information will be stored (a `torch.Tensor`,
+                    `torch.Parameter`, `torch.nn.Module`, a computation op, or `None`).
+                    Referred to as `node.fn` object from now on.
+        :depth:     The depth at which `net` is found/will be rendered
+        :parent:    The object as part of which net will be run
+        :name:      a name to recognize the object during rendering, defaults to class name
+        :returns:   `None`
+
+        """
         classname = net.__class__.__name__
         if self.node_types.get(classname):
             self.node_types[classname] += 1
@@ -47,6 +78,7 @@ class Recorder(object):
             if depth > 0 and name is not None:
                 objname = objname + "".join(["\n(", classname, ")"])
             x = LayerNode(name=objname, fn=net, parent=parent, depth=depth)
+
             x.pre = net.register_forward_pre_hook(generate_prehook(self, x))
             x.post = net.register_forward_hook(generate_posthook(self, x))
             # x.back = net.register_backward_hook(generate_backhook(self, x))
@@ -66,6 +98,16 @@ class Recorder(object):
             pnode.subnets.add(net)
 
     def add_edge(self, _from, _to):
+        """Construct an edge of the recording graph.
+
+        Records an edge between two `node.fn` objects to be used while rendering.
+        This will be used along with the `nodes` dictionary to map edges properly.
+
+        :_from: a `node.fn` object
+        :_to:   a `node.fn` object
+        :returns:
+
+        """
         if _from is None or _to is None:
             raise AssertionError("Cannot draw edge involving" + str((_from, _to)))
         edge = (_from, _to)
@@ -74,6 +116,20 @@ class Recorder(object):
 
 
 def op_acc(gf, rec, node):
+    """Operator Accumulator.
+
+    Creates an `OpNode` to record the newly-performed operation `gf`, if not
+    already recorded. If `gf` is an initialization op (`AccumulateGradient`),
+    then links `gf` to its connected `torch.Tensor` instead of creating an
+    `OpNode`. Otherwise recursively checks all operations that are connected to
+    `gf` and adds them if necessary.
+
+    :gf:    current operation, a `grad_fn` object obtained from a `torch.Tensor`
+    :rec:   a `Recorder` object whose nodes are updated
+    :node:  `LayerNode` whose `fn` the current operation is a part of
+    :returns:   None
+
+    """
     if gf in rec.node_set:
         pass
     else:
@@ -89,6 +145,18 @@ def op_acc(gf, rec, node):
 
 
 def tensor_acc(tensor, rec, node):
+    """Tensor Accumulator.
+
+    Creates a `TensorNode` to record the newly-created tensor, if not already
+    recorded.  Note that the resulting `TensorNode` has the same parent as
+    `node`, because the underlying tensor is the output of/input to `node.fn`.
+
+    :tensor:    a `torch.Tensor`
+    :rec:       a `Recorder` object whose nodes are updated
+    :node:      a `LayerNode` whose `fn` outputs/inputs `tensor`
+    :returns:   None
+
+    """
     if tensor in rec.node_set:
         pass
     else:
@@ -96,13 +164,36 @@ def tensor_acc(tensor, rec, node):
 
 
 def param_acc(param, rec, node):
+    """Parameter Accumulator.
+
+    Creates a `ParamNode` to record the parameter `param` of `node.fn`, if not
+    already recorded.  Note that `node.fn` is the *parent* of the resulting
+    `ParamNode`.
+
+    :param:     a `torch.Parameter` object, part of `node.fn`
+    :rec:       the `Recorder object whose nodes are updated
+    :node:      `LayerNode` whose `fn` contains `param`
+    :returns:   None
+
+    """
     if param in rec.node_set:
         pass
     else:
         rec.add_node(param, depth=node.depth + 1, parent=node.fn)
 
 
-def leaf_dummy(tensor, rec, node):
+def leaf_dummy(tensor, rec):
+    """Performs a dummy operation (adding 0) to a leaf tensor.
+
+    This ensures that the operations performed hereafter on `tensor` can be
+    correctly mapped to their parent. The dummy tensor (and operation) are not
+    recorded separately, they merely point to the original tensor.
+
+    :tensor:    a newly-formed leaf 'torch.Tensor`
+    :rec:       the `Recorder` object whose nodes are updated
+    :returns:   `tensor` after adding 0
+
+    """
     dummy = tensor + 0
     rec.node_set.add(dummy.grad_fn)
     rec.node_set.add(dummy)
@@ -112,7 +203,27 @@ def leaf_dummy(tensor, rec, node):
 
 
 def generate_prehook(rec, node):
+    """Closure to generate a pre-hook for a `torch.nn.Module`.
+
+    :rec:   a `Recorder` object for global information
+    :node:  a `node` which is to be associated with the `module`.
+    :returns:   the `prehook` function.
+
+    """
+
     def prehook(module, inputs):
+        """Executed BEFORE the given `torch.nn.Module` is run.
+
+        Records parameters contained in `module`, then checks each tensor in
+        `inputs` for any operations that may have run after the end of the
+        previous `module`. The `inputs` are then converted to leaf tensors and
+        recorded before being passed off to the `module`.
+
+        :module:    a `torch.nn.Module`
+        :inputs:    a `torch.Tensor` or a tuple of `torch.Tensor`s
+        :returns:   the `leaf`-equivalent of `inputs`.
+
+        """
         for name, param in module.named_parameters(recurse=False):
             param_acc(param, rec, node)
             if name is not None and name != "":
@@ -126,7 +237,7 @@ def generate_prehook(rec, node):
                 x = x.detach()
                 x.requires_grad = True
             tensor_acc(x, rec, node)
-            x2 = leaf_dummy(x, rec, node)
+            x2 = leaf_dummy(x, rec)
             if gf is not None:
                 rec.add_edge(gf, x2)
             new_inputs.append(x2)
@@ -139,7 +250,34 @@ def generate_prehook(rec, node):
 
 
 def generate_posthook(rec, node):
+    """Closure to generate a hook for a `torch.nn.Module`.
+
+    :rec:   a `Recorder` object for global information
+    :node:  a `node` which is to be associated with the `module`.
+    :returns:   the `prehook` function.
+
+    """
+
     def posthook(module, inputs, outputs):
+        """Executed AFTER the given `torch.nn.Module` has run and returned.
+
+        Records any operations that may have run as part of `module`, then if
+        checks each tensor in the `outputs` has already been recorded by a
+        sub`module` of the current `module` (the sub`module` would execute
+        first!). The `outputs` are then converted to leaf tensors to record
+        operations afresh.
+
+        (Note: the checks for `SelectBackward` op is to
+        account for the fact that the tensor might have been "leaf"-ed by a
+        sub`module`, and hopefully avoid creating multiple leafs.)
+
+
+        :module:    a `torch.nn.Module`
+        :inputs:    a `torch.Tensor` or a tuple of `torch.Tensor`s
+        :outputs:   a `torch.Tensor` or a tuple of `torch.Tensor`s
+        :returns:   the `leaf`-equivalent of `outputs`.
+
+        """
         b = tuple(outputs)
         new_outputs = []
         for x in b:
@@ -158,7 +296,7 @@ def generate_posthook(rec, node):
                     rec.nodes[x].parent = node.parent
                     node.subnets.remove(rec.nodes[x].fn)
             op_acc(gf, rec, node)
-            x2 = leaf_dummy(x, rec, node)
+            x2 = leaf_dummy(x, rec)
             if gf is not None:
                 rec.add_edge(gf, x)
             new_outputs.append(x2)

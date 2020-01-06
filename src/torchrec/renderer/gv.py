@@ -8,9 +8,8 @@
     :copyright: (c) 2020 by Gautham Venkatasubramanian.
     :license: see LICENSE for more details.
 """
-from torchrec.recorder import Recorder
 from ..nodes import BaseNode, TensorNode, ParamNode, OpNode, LayerNode
-from collections import OrderedDict
+from .base import BaseRenderer
 from graphviz import Digraph
 
 
@@ -43,24 +42,10 @@ class GraphvizStyler(object):
         return {}
 
 
-class GraphvizRenderer(object):
+class GraphvizRenderer(BaseRenderer):
     def __init__(self, rec, render_depth=256, **styler_defaults):
-        self.rec = rec
-        self.processed = OrderedDict()
-        self.render_depth = render_depth
+        BaseRenderer.__init__(self, rec, render_depth)
         self.styler = GraphvizStyler(**styler_defaults)
-
-    def __call__(self, g):
-        self._process_nodes()
-        self._process_edges()
-        while len(self.processed) != 0:
-            node = next(iter(self.processed))
-            targets = self.processed[node]
-            self._render_node(g, node)
-            for t in targets:
-                self._render_edge(g, node, t)
-            self.processed.pop(node)
-        return g
 
     def _render_node(self, g, node):
         if isinstance(node, LayerNode) and node.depth < self.render_depth:
@@ -94,25 +79,3 @@ class GraphvizRenderer(object):
                     self._render_edge(g, fnode, tnode)
             self.processed.pop(fnode)
         g.subgraph(subg)
-
-    def _process_nodes(self):
-        for k, v in self.rec.nodes.items():
-            if k is not None and v.depth <= self.render_depth:
-                self.processed[v] = []
-        self.processed = OrderedDict(
-            sorted(
-                self.processed.items(),
-                key=lambda kv: kv[0].depth - int(isinstance(kv[0], LayerNode)),
-            )
-        )
-
-    def _process_edges(self):
-        for f, t in self.rec.edges:
-            fnode = self.rec.nodes[f]
-            tnode = self.rec.nodes[t]
-            while fnode.depth > self.render_depth:
-                fnode = self.rec.nodes[fnode.parent]
-            while tnode.depth > self.render_depth:
-                tnode = self.rec.nodes[tnode.parent]
-            if fnode != tnode:
-                self.processed[fnode].append(tnode)

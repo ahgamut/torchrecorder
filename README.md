@@ -50,7 +50,8 @@ from torchrec import record, make_dot
 def main():
     net = SampleNet().cpu()
     i = int(sys.argv[1])
-    g = torchrec.make_dot(net, input_shapes=(1, 3), render_depth=i, name="Sample Net")
+    rec = torchrec.record(net, input_shapes=(1, 3), name="Sample Net")
+    g = torchrec.make_dot(rec, render_depth=i)
     # g is a graphviz.Digraph() object
     g.format = "svg"
     g.attr(label="Sample Net at depth={i}".format(i=i))
@@ -64,9 +65,11 @@ if __name__ == "__main__":
 
 And visualizations like these can be produced:
 
-![](./examples/sample1-1.svg)
+<img src="./examples/sample1-1.svg" width=200 height=650>
 
-![](./examples/sample1-2.svg)
+
+<img src="./examples/sample1-2.svg" width=350 height=800>
+
 
 ## Acknowledgements
 
