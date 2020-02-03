@@ -46,10 +46,13 @@ class GraphvizRenderer(BaseRenderer):
     def __init__(self, rec, render_depth=256, **styler_defaults):
         BaseRenderer.__init__(self, rec, render_depth)
         self.styler = GraphvizStyler(**styler_defaults)
+        self.recursion_trace = []
 
     def _render_node(self, g, node):
         if isinstance(node, LayerNode) and node.depth < self.render_depth:
+            self.recursion_trace.append(g)
             self._render_recursive_node(g, node)
+            self.recursion_trace.remove(g)
         else:
             style = self.styler(node)
             g.node(name=str(id(node)), **style)
@@ -76,6 +79,7 @@ class GraphvizRenderer(BaseRenderer):
                 if fnode.depth == tnode.depth:
                     self._render_edge(subg, fnode, tnode)
                 else:
-                    self._render_edge(g, fnode, tnode)
+                    depth_diff = abs(fnode.depth - tnode.depth)
+                    self._render_edge(self.recursion_trace[-depth_diff], fnode, tnode)
             self.processed.pop(fnode)
         g.subgraph(subg)
