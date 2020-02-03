@@ -180,13 +180,13 @@ def param_acc(param, rec, node):
         rec.add_node(param, depth=node.depth + 1, parent=node.fn)
 
 
-# TODO: This isn't used anymore, remove? <03-02-20, ahgamut> #
 def leaf_dummy(tensor, rec):
     """Performs a dummy operation (adding 0) to a leaf tensor.
 
     This ensures that the operations performed hereafter on `tensor` can be
-    correctly mapped to their parent. The dummy tensor (and operation) are not
-    recorded separately, they merely point to the original tensor.
+    correctly mapped to their parent in case of in-place operations. The dummy
+    tensor (and operation) are not recorded separately, they merely point to
+    the original tensor.
 
     :tensor:    a newly-formed leaf 'torch.Tensor`
     :rec:       the `Recorder` object whose nodes are updated
@@ -239,7 +239,7 @@ def generate_prehook(rec, node):
             tensor_acc(x, rec, node)
             if gf is not None:
                 rec.add_edge(_from=gf, _to=x)
-            new_inputs.append(x)
+            new_inputs.append(leaf_dummy(x, rec))
         return new_inputs[0] if is_singleton else tuple(new_inputs)
 
     return prehook
@@ -286,7 +286,7 @@ def generate_posthook(rec, node):
             op_acc(gf, rec, node)
             if gf is not None:
                 rec.add_edge(_from=gf, _to=x)
-            new_outputs.append(x)
+            new_outputs.append(leaf_dummy(x, rec))
         return new_outputs[0] if is_singleton else tuple(new_outputs)
 
     return posthook

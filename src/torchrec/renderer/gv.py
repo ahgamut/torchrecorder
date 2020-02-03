@@ -43,9 +43,11 @@ class GraphvizStyler(object):
 
 
 class GraphvizRenderer(BaseRenderer):
-    def __init__(self, rec, render_depth=256, **styler_defaults):
+    def __init__(
+        self, rec, render_depth=256, styler_cls=GraphvizStyler, **styler_defaults
+    ):
         BaseRenderer.__init__(self, rec, render_depth)
-        self.styler = GraphvizStyler(**styler_defaults)
+        self.styler = styler_cls(**styler_defaults)
         self.recursion_trace = []
 
     def _render_node(self, g, node):

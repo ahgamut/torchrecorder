@@ -1,9 +1,9 @@
 from graphviz import Digraph
-from .renderer import GraphvizRenderer
+from .renderer import GraphvizRenderer, GraphvizStyler
 from .record import record
 
 
-def make_dot(rec, render_depth=256, **kwargs):
+def make_dot(rec, render_depth=256, styler_cls=GraphvizStyler, **kwargs):
     """ Produces Graphviz representation of a NN in PyTorch using the autograd graph
 
     :rec: a torchrec.Recorder object
@@ -18,5 +18,7 @@ def make_dot(rec, render_depth=256, **kwargs):
         graph_attr["fontname"] = kwargs.get("fontname")
         node_attr["fontname"] = kwargs.get("fontname")
     g = Digraph(graph_attr=graph_attr, node_attr=node_attr)
-    renderer = GraphvizRenderer(rec=rec, render_depth=render_depth, **kwargs)
+    renderer = GraphvizRenderer(
+        rec=rec, render_depth=render_depth, styler_cls=styler_cls, **kwargs
+    )
     return renderer(g)
