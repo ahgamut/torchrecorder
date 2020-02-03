@@ -61,7 +61,7 @@ class Recorder(object):
         :returns:   `None`
 
         """
-        classname = net.__class__.__name__
+        classname = type(net).__name__
         if self.node_types.get(classname):
             self.node_types[classname] += 1
         else:
@@ -75,8 +75,6 @@ class Recorder(object):
             objname = name
 
         if isinstance(net, Module):
-            if depth > 0 and name is not None:
-                objname = objname + "".join(["\n(", classname, ")"])
             x = LayerNode(name=objname, fn=net, parent=parent, depth=depth)
 
             x.pre = net.register_forward_pre_hook(generate_prehook(self, x))
@@ -182,6 +180,7 @@ def param_acc(param, rec, node):
         rec.add_node(param, depth=node.depth + 1, parent=node.fn)
 
 
+# TODO: This isn't used anymore, remove? <03-02-20, ahgamut> #
 def leaf_dummy(tensor, rec):
     """Performs a dummy operation (adding 0) to a leaf tensor.
 
@@ -228,7 +227,8 @@ def generate_prehook(rec, node):
             param_acc(param, rec, node)
             if name is not None and name != "":
                 rec.nodes[param].name = name
-        a = tuple(inputs)  # same input appearing multiple times?
+        is_singleton = not isinstance(inputs, tuple)
+        a = [inputs] if is_singleton else inputs  # same input appearing multiple times?
         new_inputs = []
         for x in a:
             gf = x.grad_fn
@@ -237,14 +237,10 @@ def generate_prehook(rec, node):
                 x = x.detach()
                 x.requires_grad = True
             tensor_acc(x, rec, node)
-            x2 = leaf_dummy(x, rec)
             if gf is not None:
-                rec.add_edge(gf, x2)
-            new_inputs.append(x2)
-        if not isinstance(inputs, tuple):
-            return new_inputs[0]
-        else:
-            return tuple(new_inputs)
+                rec.add_edge(_from=gf, _to=x)
+            new_inputs.append(x)
+        return new_inputs[0] if is_singleton else tuple(new_inputs)
 
     return prehook
 
@@ -267,27 +263,19 @@ def generate_posthook(rec, node):
         first!). The `outputs` are then converted to leaf tensors to record
         operations afresh.
 
-        (Note: the checks for `SelectBackward` op is to
-        account for the fact that the tensor might have been "leaf"-ed by a
-        sub`module`, and hopefully avoid creating multiple leafs.)
-
-
         :module:    a `torch.nn.Module`
         :inputs:    a `torch.Tensor` or a tuple of `torch.Tensor`s
         :outputs:   a `torch.Tensor` or a tuple of `torch.Tensor`s
         :returns:   the `leaf`-equivalent of `outputs`.
 
         """
-        b = tuple(outputs)
+        is_singleton = not isinstance(outputs, tuple)
+        b = [outputs] if is_singleton else outputs
         new_outputs = []
         for x in b:
             gf = x.grad_fn
             if not x.is_leaf and x not in rec.node_set:
-                if "Select" in x.grad_fn.__class__.__name__:
-                    x = x.grad_fn(x).detach()
-                    gf = gf.next_functions[0][0]
-                else:
-                    x = x.detach()
+                x = x.detach()
                 x.requires_grad = True
                 tensor_acc(x, rec, node)
             elif x in rec.node_set:
@@ -296,14 +284,10 @@ def generate_posthook(rec, node):
                     rec.nodes[x].parent = node.parent
                     node.subnets.remove(rec.nodes[x].fn)
             op_acc(gf, rec, node)
-            x2 = leaf_dummy(x, rec)
             if gf is not None:
-                rec.add_edge(gf, x)
-            new_outputs.append(x2)
-        if not isinstance(outputs, tuple):
-            return new_outputs[0]
-        else:
-            return tuple(new_outputs)
+                rec.add_edge(_from=gf, _to=x)
+            new_outputs.append(x)
+        return new_outputs[0] if is_singleton else tuple(new_outputs)
 
     return posthook
 
