@@ -20,10 +20,13 @@ pip install git+https://github.com/ahgamut/pytorchrec
 
 ## Usage
 
-Consider the below sample network:
+Consider the below example network:
 
 ```python
+import sys
+from torchrec import record, make_dot
 from torch import nn
+
 class SampleNet(nn.Module):
     def __init__(self):
         nn.Module.__init__(self)
@@ -39,13 +42,6 @@ class SampleNet(nn.Module):
         z = torch.cat([x, y], dim=1)
         z = self.my_special_relu(self.linear_3(z))
         return z
-```
-
-The package can be used like this:
-
-```python
-import sys
-from torchrec import record, make_dot
 
 def main():
     net = SampleNet().cpu()
@@ -73,4 +69,10 @@ And visualizations like these can be produced:
 
 ## Acknowledgements
 
-This is inspired from [szagoruyko/pytorchviz](https://github.com/szagoruyko/pytorchviz).
+This is inspired from [`szagoruyko/pytorchviz`](https://github.com/szagoruyko/pytorchviz).  This package
+differs from `pytorchviz` as it provides rendering at multiple depths.
+
+Note that for rendering a network via TensorBoard during training, you can use
+[`torch.utils.tensorboard.SummaryWriter.add_graph`](https://pytorch.org/docs/stable/tensorboard.html#torch.utils.tensorboard.writer.SummaryWriter.add_graph),
+which records and renders to a `protobuf` in a single step.  The intended usage of `pytorchrec` is for
+presentation purposes.

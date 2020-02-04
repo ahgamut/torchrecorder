@@ -30,21 +30,7 @@ class Recorder(object):
         self.node_set = set()
         self.edges = set()
 
-        self._create_dummy()
-
-    def _create_dummy(self):
-        """Construct a dummy node as the context for the recording graph.
-
-        Adds a dummy node (mapped to `None`) to the recording graph as the
-        context.  This node has the least depth (-1); is its own parent, and
-        will have only one child: the network whose execution is to be
-        recorded.
-
-        :returns:   `None`
-
-        """
-        self.node_set.add(None)
-        self.nodes[None] = BaseNode(fn=None, depth=-1, parent=None, name="ContextDummy")
+        self._create_context()
 
     def add_node(self, net, depth=0, parent=None, name=None):
         """Construct a node of recording graph.
@@ -95,6 +81,21 @@ class Recorder(object):
             pnode = self.nodes[x.parent]
             pnode.subnets.add(net)
 
+    def add_dummy(self, dummy, fn):
+        """Point to an existing node to assist recording.
+
+        Instead of creating a separate node, the `dummy` object is used to point
+        to an existing node containing `fn`. Used for dummy ops and
+        `AccumulateGradient`s (see `leaf_dummy`).
+
+        :dummy: a dummy `torch.Tensor` or op that should not be recorded
+        :fn: a recorded object that will be connected to further ops
+        :returns: None
+
+        """
+        self.node_set.add(dummy)
+        self.nodes[dummy] = self.nodes[fn]
+
     def add_edge(self, _from, _to):
         """Construct an edge of the recording graph.
 
@@ -112,13 +113,27 @@ class Recorder(object):
         if edge not in self.edges:
             self.edges.add(edge)
 
+    def _create_context(self):
+        """Construct a dummy node as the context for the recording graph.
+
+        Adds a dummy node (mapped to `None`) to the recording graph as the
+        context.  This node has the least depth (-1); is its own parent, and
+        will have only one child: the network whose execution is to be
+        recorded.
+
+        :returns:   `None`
+
+        """
+        self.node_set.add(None)
+        self.nodes[None] = BaseNode(fn=None, depth=-1, parent=None, name="ContextDummy")
+
 
 def op_acc(gf, rec, node):
     """Operator Accumulator.
 
     Creates an `OpNode` to record the newly-performed operation `gf`, if not
     already recorded. If `gf` is an initialization op (`AccumulateGradient`),
-    then links `gf` to its connected `torch.Tensor` instead of creating an
+    then points `gf` to its connected `torch.Tensor` instead of creating an
     `OpNode`. Otherwise recursively checks all operations that are connected to
     `gf` and adds them if necessary.
 
@@ -132,8 +147,7 @@ def op_acc(gf, rec, node):
         pass
     else:
         if hasattr(gf, "variable"):
-            rec.nodes[gf] = rec.nodes[gf.variable]
-            rec.node_set.add(gf)
+            rec.add_dummy(dummy=gf, fn=gf.variable)
         elif hasattr(gf, "next_functions"):
             rec.add_node(gf, node.depth + 1, node.fn)
             for x, y in gf.next_functions:
@@ -183,10 +197,10 @@ def param_acc(param, rec, node):
 def leaf_dummy(tensor, rec):
     """Performs a dummy operation (adding 0) to a leaf tensor.
 
-    This ensures that the operations performed hereafter on `tensor` can be
-    correctly mapped to their parent in case of in-place operations. The dummy
-    tensor (and operation) are not recorded separately, they merely point to
-    the original tensor.
+    This ensures that the (possibly in-place) operations performed on `tensor`
+    hereafter can be correctly mapped to their parent in case. The dummy tensor
+    (and operation) are not recorded separately, they merely point to the
+    original tensor.
 
     :tensor:    a newly-formed leaf 'torch.Tensor`
     :rec:       the `Recorder` object whose nodes are updated
@@ -194,10 +208,8 @@ def leaf_dummy(tensor, rec):
 
     """
     dummy = tensor + 0
-    rec.node_set.add(dummy.grad_fn)
-    rec.node_set.add(dummy)
-    rec.nodes[dummy] = rec.nodes[tensor]
-    rec.nodes[dummy.grad_fn] = rec.nodes[tensor]
+    rec.add_dummy(dummy=dummy, fn=tensor)
+    rec.add_dummy(dummy=dummy.grad_fn, fn=tensor)
     return dummy
 
 
@@ -236,7 +248,7 @@ def generate_prehook(rec, node):
             if not x.is_leaf and x not in rec.node_set:
                 x = x.detach()
                 x.requires_grad = True
-            tensor_acc(x, rec, node)
+                tensor_acc(x, rec, node)
             if gf is not None:
                 rec.add_edge(_from=gf, _to=x)
             new_inputs.append(leaf_dummy(x, rec))
