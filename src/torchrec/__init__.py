@@ -1,4 +1,2 @@
-from .record import record
-from .recorder import Recorder
-from .renderer import GraphvizRenderer, GraphvizStyler, make_dot
-from .nodes import BaseNode, TensorNode, ParamNode, OpNode, LayerNode
+from .helpers import render_network, record, make_dot
+from .renderer import GraphvizStyler

@@ -5,8 +5,8 @@
 
     Abstract base class for Renderer objects
 
-    :copyright: (c) 2020 by Gautham Venkatasubramanian.
-    :license: see LICENSE for more details.
+    :param copyright: (c) 2020 by Gautham Venkatasubramanian.
+    :param license: see LICENSE for more details.
 """
 from collections import OrderedDict
 from ..nodes import LayerNode
@@ -14,15 +14,16 @@ from ..nodes import LayerNode
 
 class BaseRenderer(object):
 
-    """Base Class for rendering information from a `Recorder` object.
+    """Base Class for rendering information from a `~torchrec.recorder.Recorder`.
 
     Attributes:
 
-    :rec:           A `Recorder` object
-    :render_depth:  nodes having a greater depth than this value
-                    will not be rendered
-    :processed:     An `OrderedDict` whose keys contain `nodes` and values
-                    contain the corresponding (directed) edge lists
+        rec (`~torchrec.recorder.Recorder`):
+        render_depth (int): nodes having a greater depth than this value
+                            will not be rendered
+        processed (`collections.OrderedDict`):
+                            An ``OrderedDict`` whose keys contain ``nodes`` and values
+                            contain the corresponding (directed) edge lists
     """
 
     def __init__(self, rec, render_depth=256):
@@ -42,10 +43,15 @@ class BaseRenderer(object):
     def __call__(self, dest):
         """Render nodes and edges.
 
-        :dest:      destination for the rendered information (graphviz.Digraph,
-                    JSON/dict etc.)
-        :returns:   `dest` after updating with necessary
-                    information
+        Uses `.render_depth` to select nodes and edges from `.rec`
+        required for rendering. calls `.render_node` on each node,
+        followed by `render_edge` on each edge from that node.
+
+        Args:
+            dest:    destination for the rendered information
+                    (`graphviz.Digraph`, `dict` etc.)
+        Returns:
+            ``dest`` after updating with necessary information
         """
         self.processed.clear()
         self._process_nodes()
@@ -61,8 +67,6 @@ class BaseRenderer(object):
 
     def _process_nodes(self):
         """Filter out nodes that have a greater depth than required.
-
-        :returns: `None`
         """
         for k, v in self.rec.nodes.items():
             if k is not None and v.depth <= self.render_depth:
@@ -71,14 +75,11 @@ class BaseRenderer(object):
     def _process_edges(self):
         """Construct necessary edges between filtered nodes.
 
-        After all nodes deeper than `render_depth` have been removed, all the
+        After all nodes deeper than `.render_depth` have been removed, all the
         edges that between these nodes and those that remain must be
         transformed accordingly: such edges are "raised up" for rendering, and
         ignored if they are internal to a node (i.e. both source and
         destination have been removed).
-
-        :returns: `None`
-
         """
         for f, t in self.rec.edges:
             fnode = self.rec.nodes[f]

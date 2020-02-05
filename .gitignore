@@ -1,7 +1,8 @@
 .*.s[a-z][a-z]
+docs/*
+!docs/source/
+!docs/requirements.txt
 
-docs/* 
-# no docs for now
 #####=== Python ===#####
 
 # Byte-compiled / optimized / DLL files

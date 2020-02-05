@@ -6,4 +6,4 @@
     :copyright: (c) 2020 by Gautham Venkatasubramanian.
     :license: see LICENSE for more details.
 """
-from .gv import GraphvizRenderer, GraphvizStyler, make_dot
+from .gv import GraphvizRenderer, GraphvizStyler

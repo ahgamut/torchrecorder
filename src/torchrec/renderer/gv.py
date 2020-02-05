@@ -5,8 +5,8 @@
 
     Graphviz renderer object
 
-    :copyright: (c) 2020 by Gautham Venkatasubramanian.
-    :license: see LICENSE for more details.
+    :param copyright: (c) 2020 by Gautham Venkatasubramanian.
+    :param license: see LICENSE for more details.
 """
 from ..nodes import BaseNode, TensorNode, ParamNode, OpNode, LayerNode
 from .base import BaseRenderer
@@ -14,23 +14,40 @@ from graphviz import Digraph
 
 
 class GraphvizStyler(object):
-    def __init__(self, **default):
-        self.styles = {}
+    """Provide styling options before rendering to graphviz.
 
+    Attributes:
+        styles (dict):   contains style properties for each subclass of `~torchrec.nodes.BaseNode`
+    """
+
+    def __init__(self, **styler_args):
         def setdefault(x, y):
-            if default.get(x, None) is None:
-                default[x] = y
+            if styler_args.get(x, None) is None:
+                styler_args[x] = y
 
         setdefault("style", "filled")
         setdefault("align", "left")
         setdefault("color", "black")
 
-        self.styles[TensorNode] = dict(**default, fillcolor="lightblue")
-        self.styles[ParamNode] = dict(**default, fillcolor="darkolivegreen")
-        self.styles[OpNode] = dict(**default, fillcolor="orange", shape="box")
-        self.styles[LayerNode] = dict(**default, fillcolor="lightgrey", shape="box")
+        self.styles = {
+            BaseNode: dict(**styler_args),
+            TensorNode: dict(**styler_args, fillcolor="lightblue"),
+            ParamNode: dict(**styler_args, fillcolor="darkolivegreen"),
+            OpNode: dict(**styler_args, fillcolor="orange", shape="box"),
+            LayerNode: dict(**styler_args, fillcolor="lightgrey", shape="box"),
+        }
 
-    def __call__(self, node):
+    def style_node(self, node):
+        """Construct style properties for the given node.
+
+        Can be overridden to perform custom styling.
+
+        Args:
+            node (`~torchrec.nodes.BaseNode`\ ):
+        Returns:
+            a `dict` containing the required style properties
+
+        """
         z = dict(**self.styles[type(node)])
         if isinstance(node, TensorNode):
             z["label"] = node.name + "\n" + str(list(node.fn.shape))
@@ -38,31 +55,70 @@ class GraphvizStyler(object):
             z["label"] = node.name
         return z
 
-    def style_edge(self, edge):
+    def style_edge(self, fnode, tnode):
+        """Construct style properties to render the given edge
+
+        Args:
+            fnode: `~torchrec.nodes.BaseNode`
+            tnode: `~torchrec.nodes.BaseNode`
+
+        Returns:
+            a `dict` containing the required style properties
+
+        """
         return {}
 
 
 class GraphvizRenderer(BaseRenderer):
-    def __init__(
-        self, rec, render_depth=256, styler_cls=GraphvizStyler, **styler_defaults
-    ):
+    """Render information from a `~torchrec.recorder.Recorder` into a `graphviz.Digraph`.
+
+    Attributes:
+        styler (`class`): `.GraphvizStyler` or a subclass
+    """
+
+    def __init__(self, rec, render_depth=256, styler_cls=None, **styler_args):
         BaseRenderer.__init__(self, rec, render_depth)
-        self.styler = styler_cls(**styler_defaults)
+        if styler_cls is None:
+            styler_cls = GraphvizStyler
+        self.styler = styler_cls(**styler_args)
         self.recursion_trace = []
 
     def render_node(self, g, node):
+        """Render a node in `graphviz`
+
+        Renders ``node`` into the `~graphviz.Digraph` ``g``,
+        after applying appropriate styling.
+        If ``node`` is a `~torchrec.nodes.LayerNode`, checks
+        `.render_depth` to see if its
+        `~.torchrec.nodes.LayerNode.subnets` have to rendered.
+
+        Args:
+            g (`graphviz.Digraph`):
+            node (`~torchrec.nodes.BaseNode`):
+
+        """
         if isinstance(node, LayerNode) and node.depth < self.render_depth:
             self.recursion_trace.append(g)
             self.render_recursive_node(g, node)
             self.recursion_trace.remove(g)
         else:
-            style = self.styler(node)
+            style = self.styler.style_node(node)
             g.node(name=str(id(node)), **style)
 
     def render_recursive_node(self, g, node):
-        subg_style = self.styler(node)
+        """Render a `~torchrec.nodes.LayerNode` and its subnets.
+
+        Args:
+            g (`graphviz.Digraph`):
+            node (`~torchrec.nodes.LayerNode`): has a
+                                `~torchrec.nodes.LayerNode.depth` greater than
+                                `.render_depth`
+
+        The ``node`` is rendered as a separate `~graphviz.Digraph`
+        and then is added as a `graphviz.Digraph.subgraph` to ``g``.
+        """
+        subg_style = self.styler.style_node(node)
         subg_style["fillcolor"] = "white"
-        subg_style["label"] = node.name
         subg = Digraph(
             name="cluster_" + str(id(node)),
             graph_attr=subg_style,
@@ -83,29 +139,13 @@ class GraphvizRenderer(BaseRenderer):
         g.subgraph(subg)
 
     def render_edge(self, g, fnode, tnode):
-        # style = self.styler.style_edge(fnode, tnode)
-        g.edge(str(id(fnode)), str(id(tnode)))
+        """Render an edge in `graphviz`
 
+        Args:
+            g (`graphviz.Digraph`):
+            fnode (`~torchrec.nodes.BaseNode`):
+            tnode (`~torchrec.nodes.BaseNode`):
 
-def make_dot(rec, render_depth=256, styler_cls=GraphvizStyler, **styler_args):
-    """ Produces Graphviz representation of a NN in PyTorch using the autograd graph
-
-    :rec:           a torchrec.Recorder object
-    :render_depth:  depth until which nodes in the graph should be rendered
-    :styler_cls:    (subclass of) GraphvizStyler, to be instantiated
-                    by the renderer
-    :**styler_args:      default styler properties to be set for
-                    all nodes in graphviz (fontname, etc)
-    :returns:       a Graphviz.Digraph with the rendered nodes
-
-    """
-    graph_attr = dict(compound="true", ranksep="0.5", fontsize="24")
-    node_attr = dict(fontsize="20")
-    if kwargs.get("fontname", None) is not None:
-        graph_attr["fontname"] = kwargs.get("fontname")
-        node_attr["fontname"] = kwargs.get("fontname")
-    g = Digraph(graph_attr=graph_attr, node_attr=node_attr)
-    renderer = GraphvizRenderer(
-        rec=rec, render_depth=render_depth, styler_cls=styler_cls, **kwargs
-    )
-    return renderer(g)
+        """
+        style = self.styler.style_edge(fnode, tnode)
+        g.edge(str(id(fnode)), str(id(tnode)), **style)
