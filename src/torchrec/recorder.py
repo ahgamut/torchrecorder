@@ -12,6 +12,7 @@ from torch.nn import Module
 from collections import OrderedDict
 from .nodes import BaseNode, TensorNode, ParamNode, OpNode, LayerNode
 from functools import partial
+import time
 
 
 class Recorder(object):
@@ -32,6 +33,7 @@ class Recorder(object):
         self.fn_set = set()
         self.edges = set()
 
+        self._start_time = None
         self._create_context()
 
     def add_node(self, net, depth=0, parent=None, name=None):
@@ -115,7 +117,12 @@ class Recorder(object):
         """
         if _from is None or _to is None:
             raise AssertionError("Cannot draw edge involving" + str((_from, _to)))
-        edge = (_from, _to)
+        if self._start_time is not None:
+            timestamp = time.time() - self._start_time
+        else:
+            timestamp = 0
+            self._start_time = time.time()
+        edge = (_from, _to, round(timestamp, 6))
         self.edges.add(edge)
 
     def register_hooks(self, net, depth=0, parent=None, name=None):
@@ -292,10 +299,7 @@ def prehook(module, inputs, rec, node):
     for x in a:
         gf = x.grad_fn
         op_acc(gf, rec, rec.nodes[node.parent])
-        if not x.is_leaf and x not in rec.fn_set:
-            x = x.detach()
-            x.requires_grad = True
-            tensor_acc(x, rec, node)
+        tensor_acc(x, rec, node)
         if gf is not None:
             rec.add_edge(_from=gf, _to=x)
         new_inputs.append(leaf_dummy(x, rec))
@@ -328,19 +332,20 @@ def posthook(module, inputs, outputs, rec, node):
     new_outputs = []
     for x in b:
         gf = x.grad_fn
-        if not x.is_leaf and x not in rec.fn_set:
+        if gf not in rec.fn_set:
             x = x.detach()
             x.requires_grad = True
             tensor_acc(x, rec, node)
-        elif x in rec.fn_set:
-            if node.fn == rec.nodes[x].parent:
-                rec.nodes[x].depth -= 1
-                rec.nodes[x].parent = node.parent
-                node.subnets.remove(rec.nodes[x].fn)
-        op_acc(gf, rec, node)
-        if gf is not None:
-            rec.add_edge(_from=gf, _to=x)
-        new_outputs.append(leaf_dummy(x, rec))
+            op_acc(gf, rec, node)
+            rec.add_edge(gf, x)
+            new_outputs.append(leaf_dummy(x, rec))
+        else:
+            # if the op has already been recorded
+            # it has to be a dummy op
+            rec.nodes[gf].parent = node.parent
+            rec.nodes[gf].depth -= 1
+            node.subnets.remove(rec.nodes[gf].fn)
+            new_outputs.append(x)
     return new_outputs[0] if is_singleton else tuple(new_outputs)
 
 

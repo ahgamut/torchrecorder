@@ -3,7 +3,6 @@
 .. include:: ./README.rst
 
 
-
 Contents
 --------
 
@@ -13,5 +12,4 @@ Contents
     manual
     api
     license
-
 

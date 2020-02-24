@@ -77,16 +77,21 @@ class BaseRenderer(object):
 
         After all nodes deeper than `.render_depth` have been removed, all the
         edges that between these nodes and those that remain must be
-        transformed accordingly: such edges are "raised up" for rendering, and
+        transformed accordingly: such edges are "lifted up" for rendering, and
         ignored if they are internal to a node (i.e. both source and
         destination have been removed).
         """
-        for f, t in self.rec.edges:
-            fnode = self.rec.nodes[f]
-            tnode = self.rec.nodes[t]
-            while fnode.depth > self.render_depth:
-                fnode = self.rec.nodes[fnode.parent]
-            while tnode.depth > self.render_depth:
-                tnode = self.rec.nodes[tnode.parent]
-            if fnode != tnode:
-                self.processed[fnode].append(tnode)
+
+        def lifted_node(x):
+            xnode = self.rec.nodes[x]
+            while xnode.depth > self.render_depth:
+                xnode = self.rec.nodes[xnode.parent]
+            return xnode
+
+        lifted_edges = set(
+            (lifted_node(x), lifted_node(y), z)
+            for x, y, z in self.rec.edges
+            if lifted_node(x) != lifted_node(y)
+        )
+        for fnode, tnode, _ in lifted_edges:
+            self.processed[fnode].append(tnode)

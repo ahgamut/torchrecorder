@@ -16,7 +16,7 @@ Install via ``pip`` and PyPI:
 
 .. code-block:: bash
 
-    $ pip3 install pytorchrec
+    $ pip install torchrec
 
 Install via ``pip`` and the Github repo:
 

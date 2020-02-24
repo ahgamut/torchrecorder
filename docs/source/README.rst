@@ -1,6 +1,8 @@
 `torchrec`
 ==========
 
+|rtd|
+
 `torchrec` is a Python package that can be used to record the execution graph of a `torch.nn.Module` and use
 it to render a visualization of the network structure via `graphviz`. 
 
@@ -19,8 +21,7 @@ Install via ``pip``:
 
 .. code-block:: bash
 
-    $ pip3 install torchrec
-
+    $ pip install torchrec
 
 Simple Example
 --------------
@@ -40,6 +41,8 @@ Simple Example
           :height:  600px
           :width:   300px
 
-.. |img2| image:: ../../examples/Sample\ Net-2.svg 
+.. |img2| image:: ../../examples/Sample\ Net-2.svg
           :height:  600px
           :width:   300px
+
+.. |rtd| image:: https://readthedocs.org/projects/pytorchrec/badge/?version=latest&style=flat
