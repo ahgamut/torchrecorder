@@ -1,7 +1,7 @@
 User Guide
 ==========
 
-``torchrecord`` is pure Python3 code, it does not contain any C modules.
+``torchrecorder`` is pure Python3 code, it does not contain any C modules.
 
 Installation
 ------------
@@ -16,18 +16,18 @@ Install via ``pip`` and PyPI:
 
 .. code-block:: bash
 
-    $ pip install torchrecord
+    $ pip install torchrecorder
 
 Install via ``pip`` and the Github repo:
 
 .. code-block:: bash
 
-    $ pip install git+https://github.com/ahgamut/torchrecord/
+    $ pip install git+https://github.com/ahgamut/torchrecorder/
 
 Examples
 --------
 
-The default usage is via the `~torchrecord.render_network` wrapper function.
+The default usage is via the `~torchrecorder.render_network` wrapper function.
 
 .. literalinclude:: ../../examples/sample.py
     :lines: 1-34
@@ -36,8 +36,8 @@ The default usage is via the `~torchrecord.render_network` wrapper function.
 |sample|
 
 
-The render_network function calls `~torchrecord.record` and `~torchrecord.make_dot` so the call to 
-`~torchrecord.render_network`  in the above example could be written as below, to allow for 
+The render_network function calls `~torchrecorder.record` and `~torchrecorder.make_dot` so the call to 
+`~torchrecorder.render_network`  in the above example could be written as below, to allow for 
 any modifications to the `~graphviz.Digraph` after rendering.
 
 .. literalinclude:: ../../examples/sample.py
@@ -48,7 +48,7 @@ Styling `graphviz` attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To change the default styling attributes of every node, you can pass any number of `graphviz`\ -related attributes [#graphviz_kwds]_ 
-as keyword arguments to `~torchrecord.render_network` (or `~torchrecord.make_dot`\ ). 
+as keyword arguments to `~torchrecorder.render_network` (or `~torchrecorder.make_dot`\ ). 
 The below example sets ``Lato`` as the default font.
 
 .. literalinclude:: ../../examples/styleargs.py
@@ -60,9 +60,9 @@ The below example sets ``Lato`` as the default font.
 Custom Styler Objects
 ^^^^^^^^^^^^^^^^^^^^^
 
-If the default styling of node shapes/colors is not sufficient, you can create a subclass of `~torchrecord.renderer.GraphvizStyler` and
-pass it to `~torchrecord.make_dot` via the ``styler_cls`` argument. The subclass needs to accepts `graphviz` attributes as keyword arguments,
-and override the `~torchrecord.renderer.GraphvizStyler.style_node` and `~torchrecord.renderer.GraphvizStyler.style_edge` methods.
+If the default styling of node shapes/colors is not sufficient, you can create a subclass of `~torchrecorder.renderer.GraphvizStyler` and
+pass it to `~torchrecorder.make_dot` via the ``styler_cls`` argument. The subclass needs to accepts `graphviz` attributes as keyword arguments,
+and override the `~torchrecorder.renderer.GraphvizStyler.style_node` and `~torchrecorder.renderer.GraphvizStyler.style_edge` methods.
 
 In the below example, I construct a styler subclass that shows some parameters of `~torch.nn.Conv2d` objects, draws orange edges 
 out of `~torch.nn.Conv2d` objects, and blue edges into `~torch.nn.ReLU` objects:
@@ -76,11 +76,11 @@ out of `~torch.nn.Conv2d` objects, and blue edges into `~torch.nn.ReLU` objects:
 Rendering into different formats
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently, the `torchrecord` package only provides rendering into `graphviz` objects, but the rendering functionality 
-can be extended by subclassing the `~torchrecord.renderer.base.BaseRenderer` class in a manner similar to the `~torchrecord.renderer.GraphvizRenderer`.
+Currently, the `torchrecorder` package only provides rendering into `graphviz` objects, but the rendering functionality 
+can be extended by subclassing the `~torchrecorder.renderer.base.BaseRenderer` class in a manner similar to the `~torchrecorder.renderer.GraphvizRenderer`.
 You can read the source code to see how the subclassing can be done.
 
-If you create a subclass of `~torchrecord.renderer.base.BaseRenderer` for a new rendering format, submit a pull request! 
+If you create a subclass of `~torchrecorder.renderer.base.BaseRenderer` for a new rendering format, submit a pull request! 
 I've been trying to render in a `SigmaJS <http://sigmajs.org/>`_\ -compatible format, but haven't been able to.
 
 .. |sample| image:: ../../examples/Sample\ Net-1.svg

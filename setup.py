@@ -6,11 +6,11 @@ with open("./README.md") as f:
     long_description = f.read()
 
 setup_info = dict(
-    name="torchrecord",
+    name="torchrecorder",
     version=VERSION,
     author="Gautham Venkatasubramanian",
     author_email="ahgamut@gmail.com",
-    url="https://github.com/ahgamut/torchrecord",
+    url="https://github.com/ahgamut/torchrecorder",
     description="Record execution graphs of PyTorch neural networks",
     long_description=long_description,
     long_description_content_type="text/markdown",

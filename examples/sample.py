@@ -1,6 +1,6 @@
 import sys
 import torch
-import torchrecord
+import torchrecorder
 
 
 class SampleNet(torch.nn.Module):
@@ -23,7 +23,7 @@ class SampleNet(torch.nn.Module):
 def main():
     i = int(sys.argv[1])
     net = SampleNet()
-    torchrecord.render_network(
+    torchrecorder.render_network(
         net,
         name="Sample Net",
         input_shapes=(1, 3),
@@ -37,8 +37,8 @@ def main2():
     i = int(sys.argv[1])
     net = SampleNet()
     # equivalent to calling render_network
-    rec = torchrecord.record(net, name="Sample Net", input_shapes=(1, 3))
-    g = torchrecord.make_dot(rec, render_depth=i)
+    rec = torchrecorder.record(net, name="Sample Net", input_shapes=(1, 3))
+    g = torchrecorder.make_dot(rec, render_depth=i)
     # g is graphviz.Digraph object
     g.format = "svg"
     g.attr(label="{} at depth={}".format("Sample Net", i))

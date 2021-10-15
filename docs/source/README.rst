@@ -1,9 +1,9 @@
-`torchrecord`
+`torchrecorder`
 ==========
 
 |rtd|
 
-`torchrecord` is a Python package that can be used to record the execution graph of a `torch.nn.Module` and use
+`torchrecorder` is a Python package that can be used to record the execution graph of a `torch.nn.Module` and use
 it to render a visualization of the network structure via `graphviz`. 
 
 Licensed under MIT License.
@@ -21,7 +21,7 @@ Install via ``pip``:
 
 .. code-block:: bash
 
-    $ pip install torchrecord
+    $ pip install torchrecorder
 
 Simple Example
 --------------
@@ -45,4 +45,4 @@ Simple Example
           :height:  600px
           :width:   300px
 
-.. |rtd| image:: https://readthedocs.org/projects/torchrecord/badge/?version=latest&style=flat
+.. |rtd| image:: https://readthedocs.org/projects/torchrecorder/badge/?version=latest&style=flat

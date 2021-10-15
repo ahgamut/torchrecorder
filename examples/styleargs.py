@@ -1,6 +1,6 @@
 import sys
 import torch
-import torchrecord
+import torchrecorder
 
 
 class SampleNet(torch.nn.Module):
@@ -22,8 +22,8 @@ class SampleNet(torch.nn.Module):
 
 def main():
     net = SampleNet()
-    rec = torchrecord.record(net, name="Sample Net", input_shapes=(1, 3))
-    g = torchrecord.make_dot(rec, render_depth=1, fontname="Lato")
+    rec = torchrecorder.record(net, name="Sample Net", input_shapes=(1, 3))
+    g = torchrecorder.make_dot(rec, render_depth=1, fontname="Lato")
     g.format = "svg"
     g.attr(label="Font Change via styler_args")
     g.render("{}-{}".format("StyleArgs", 1), directory="./", cleanup=True)

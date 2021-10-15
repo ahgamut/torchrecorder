@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    torchrecord.renderer.__init__
+    torchrecorder.renderer.__init__
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     :copyright: (c) 2020 by Gautham Venkatasubramanian.

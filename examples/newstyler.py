@@ -1,7 +1,7 @@
 import sys
 import torch
-import torchrecord
-from torchrecord.renderer import GraphvizStyler
+import torchrecorder
+from torchrecorder.renderer import GraphvizStyler
 
 
 class ConvSample(torch.nn.Module):
@@ -50,8 +50,8 @@ class MyStyler(GraphvizStyler):
 
 def main():
     net = ConvSample()
-    rec = torchrecord.record(net, name="ConvSample", input_shapes=(1, 1, 10, 10))
-    g = torchrecord.make_dot(rec, render_depth=1, styler_cls=MyStyler, fontname="Lato")
+    rec = torchrecorder.record(net, name="ConvSample", input_shapes=(1, 1, 10, 10))
+    g = torchrecorder.make_dot(rec, render_depth=1, styler_cls=MyStyler, fontname="Lato")
     g.format = "svg"
     g.attr(label="Custom Styler Class")
     g.render("{}-{}".format("CustomStyler", 1), directory="./", cleanup=True)
