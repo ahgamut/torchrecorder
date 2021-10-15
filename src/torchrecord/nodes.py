@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    torchrec.nodes
+    torchrecord.nodes
     ~~~~~~~~~~~~~~
 
     Nodes of the execution graph
@@ -14,7 +14,7 @@ class BaseNode(object):
     """Wrapper object to encapsulate recorded information.
 
     Attributes:
-        fn  (object):       an `object` recorded by the `~torchrec.recorder.Recorder`
+        fn  (object):       an `object` recorded by the `~torchrecord.recorder.Recorder`
         name (str):         name of the `.fn`
         depth (int):        `int`, scope depth of `.fn`
         parent (object):    a `.fn` in whose scope the current `.fn` exists

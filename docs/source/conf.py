@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath("../../src/"))
 
 # -- Project information -----------------------------------------------------
 
-project = "torchrec"
+project = "torchrecord"
 copyright = "2020, Gautham Venkatasubramanian"
 author = "Gautham Venkatasubramanian"
 
@@ -127,7 +127,7 @@ html_static_path = ["_static"]
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "torchrecdoc"
+htmlhelp_basename = "torchrecorddoc"
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -153,8 +153,8 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "torchrec.tex",
-        "torchrec Documentation",
+        "torchrecord.tex",
+        "torchrecord Documentation",
         "Gautham Venkatasubramanian",
         "manual",
     )
@@ -165,7 +165,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "torchrec", "torchrec Documentation", [author], 1)]
+man_pages = [(master_doc, "torchrecord", "torchrecord Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------------
@@ -176,10 +176,10 @@ man_pages = [(master_doc, "torchrec", "torchrec Documentation", [author], 1)]
 texinfo_documents = [
     (
         master_doc,
-        "torchrec",
-        "torchrec Documentation",
+        "torchrecord",
+        "torchrecord Documentation",
         author,
-        "torchrec",
+        "torchrecord",
         "Record and visualize PyTorch neural networks",
         "Miscellaneous",
     )

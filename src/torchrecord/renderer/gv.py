@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    torchrec.renderer.gv
+    torchrecord.renderer.gv
     ~~~~~~~~~~~~~~~~~~~~
 
     Graphviz renderer object
@@ -17,7 +17,7 @@ class GraphvizStyler(object):
     """Provide styling options before rendering to graphviz.
 
     Attributes:
-        styles (dict):   contains style properties for each subclass of `~torchrec.nodes.BaseNode`
+        styles (dict):   contains style properties for each subclass of `~torchrecord.nodes.BaseNode`
     """
 
     def __init__(self, **styler_args):
@@ -43,7 +43,7 @@ class GraphvizStyler(object):
         Can be overridden to perform custom styling.
 
         Args:
-            node (`~torchrec.nodes.BaseNode`\ ):
+            node (`~torchrecord.nodes.BaseNode`\ ):
         Returns:
             a `dict` containing the required style properties
 
@@ -59,8 +59,8 @@ class GraphvizStyler(object):
         """Construct style properties to render the given edge
 
         Args:
-            fnode: `~torchrec.nodes.BaseNode`
-            tnode: `~torchrec.nodes.BaseNode`
+            fnode: `~torchrecord.nodes.BaseNode`
+            tnode: `~torchrecord.nodes.BaseNode`
 
         Returns:
             a `dict` containing the required style properties
@@ -70,7 +70,7 @@ class GraphvizStyler(object):
 
 
 class GraphvizRenderer(BaseRenderer):
-    """Render information from a `~torchrec.recorder.Recorder` into a `graphviz.Digraph`.
+    """Render information from a `~torchrecord.recorder.Recorder` into a `graphviz.Digraph`.
 
     Attributes:
         styler (`class`): `.GraphvizStyler` or a subclass
@@ -88,13 +88,13 @@ class GraphvizRenderer(BaseRenderer):
 
         Renders ``node`` into the `~graphviz.Digraph` ``g``,
         after applying appropriate styling.
-        If ``node`` is a `~torchrec.nodes.LayerNode`, checks
+        If ``node`` is a `~torchrecord.nodes.LayerNode`, checks
         `.render_depth` to see if its
-        `~.torchrec.nodes.LayerNode.subnets` have to rendered.
+        `~.torchrecord.nodes.LayerNode.subnets` have to rendered.
 
         Args:
             g (`graphviz.Digraph`):
-            node (`~torchrec.nodes.BaseNode`):
+            node (`~torchrecord.nodes.BaseNode`):
 
         """
         if isinstance(node, LayerNode) and node.depth < self.render_depth:
@@ -106,12 +106,12 @@ class GraphvizRenderer(BaseRenderer):
             g.node(name=str(id(node)), **style)
 
     def render_recursive_node(self, g, node):
-        """Render a `~torchrec.nodes.LayerNode` and its subnets.
+        """Render a `~torchrecord.nodes.LayerNode` and its subnets.
 
         Args:
             g (`graphviz.Digraph`):
-            node (`~torchrec.nodes.LayerNode`): has a
-                                `~torchrec.nodes.LayerNode.depth` greater than
+            node (`~torchrecord.nodes.LayerNode`): has a
+                                `~torchrecord.nodes.LayerNode.depth` greater than
                                 `.render_depth`
 
         The ``node`` is rendered as a separate `~graphviz.Digraph`
@@ -143,8 +143,8 @@ class GraphvizRenderer(BaseRenderer):
 
         Args:
             g (`graphviz.Digraph`):
-            fnode (`~torchrec.nodes.BaseNode`):
-            tnode (`~torchrec.nodes.BaseNode`):
+            fnode (`~torchrecord.nodes.BaseNode`):
+            tnode (`~torchrecord.nodes.BaseNode`):
 
         """
         style = self.styler.style_edge(fnode, tnode)

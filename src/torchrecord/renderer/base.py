@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    torchrec.renderer.base
+    torchrecord.renderer.base
     ~~~~~~~~~~~~~~~~~~~~~~
 
     Abstract base class for Renderer objects
@@ -14,11 +14,11 @@ from ..nodes import LayerNode
 
 class BaseRenderer(object):
 
-    """Base Class for rendering information from a `~torchrec.recorder.Recorder`.
+    """Base Class for rendering information from a `~torchrecord.recorder.Recorder`.
 
     Attributes:
 
-        rec (`~torchrec.recorder.Recorder`):
+        rec (`~torchrecord.recorder.Recorder`):
         render_depth (int): nodes having a greater depth than this value
                             will not be rendered
         processed (`collections.OrderedDict`):

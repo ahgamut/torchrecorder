@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    torchrec.recorder
+    torchrecord.recorder
     ~~~~~~~~~~~~~~~~~
 
     Uses hooks to record the traversal of the execution graph
@@ -20,11 +20,11 @@ class Recorder(object):
     """Record and store execution graph information
 
     Attributes:
-        fn_set (set):         a set of objects ( `~torchrec.nodes.BaseNode.fn`\ s) that contain recordable information
-        nodes (dict):           a mapping of `~torchrec.nodes.BaseNode.fn`\ s
-                                to their corresponding `~torchrec.nodes.BaseNode`\ s
-        fn_types (dict):      a count of `~torchrec.nodes.BaseNode.fn`\ s by type for naming
-        edges   (set(tuple)):   a set of edges, each a pair of `~torchrec.nodes.BaseNode.fn`\ s
+        fn_set (set):         a set of objects ( `~torchrecord.nodes.BaseNode.fn`\ s) that contain recordable information
+        nodes (dict):           a mapping of `~torchrecord.nodes.BaseNode.fn`\ s
+                                to their corresponding `~torchrecord.nodes.BaseNode`\ s
+        fn_types (dict):      a count of `~torchrecord.nodes.BaseNode.fn`\ s by type for naming
+        edges   (set(tuple)):   a set of edges, each a pair of `~torchrecord.nodes.BaseNode.fn`\ s
     """
 
     def __init__(self):
@@ -108,12 +108,12 @@ class Recorder(object):
     def add_edge(self, _from, _to):
         """Construct an edge of the recording graph.
 
-        Records an edge between two `~torchrec.nodes.BaseNode.fn` objects to be used while rendering.
+        Records an edge between two `~torchrecord.nodes.BaseNode.fn` objects to be used while rendering.
         This will be used along with the ``nodes`` dictionary to map edges properly.
 
         Args:
-            _from (`~torchrec.nodes.BaseNode.fn`\ ):
-            _to (`~torchrec.nodes.BaseNode.fn`\ ):
+            _from (`~torchrecord.nodes.BaseNode.fn`\ ):
+            _to (`~torchrecord.nodes.BaseNode.fn`\ ):
         """
         if _from is None or _to is None:
             raise AssertionError("Cannot draw edge involving" + str((_from, _to)))
@@ -148,10 +148,10 @@ class Recorder(object):
 
     def remove_hooks(self):
         """Remove hooks from any `~torch.nn.Module`\ s in
-        `~torchrec.nodes.LayerNode`\ s.
+        `~torchrecord.nodes.LayerNode`\ s.
 
         After the recording is completed, the hooks in
-        `~torchrec.nodes.LayerNode`\ s are unnecessary.
+        `~torchrecord.nodes.LayerNode`\ s are unnecessary.
         They are removed to prevent any possible issues.
         """
         for node in set(self.nodes.values()):
@@ -282,7 +282,7 @@ def prehook(module, inputs, rec, node):
         module:     a `torch.nn.Module`
         inputs:     a `torch.Tensor` or a `tuple` of `torch.Tensor`\ s
         rec:        a `~.Recorder` object for global information
-        node (`~torchrec.nodes.LayerNode`\ ):
+        node (`~torchrecord.nodes.LayerNode`\ ):
                     ``node.fn`` is ``module``\ .
 
     Returns:
@@ -320,7 +320,7 @@ def posthook(module, inputs, outputs, rec, node):
         inputs:     a `torch.Tensor` or a tuple of `torch.Tensor`\ s
         outputs:    a `torch.Tensor` or a tuple of `torch.Tensor`\ s
         rec:        a `~.Recorder` object for global information
-        node (`~torchrec.nodes.LayerNode`\ ):
+        node (`~torchrecord.nodes.LayerNode`\ ):
                     ``node.fn`` is ``module``.
 
     Returns:

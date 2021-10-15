@@ -4,58 +4,58 @@ API Reference
 Convenience Functions
 ---------------------
 
-.. autofunction:: torchrec.render_network
+.. autofunction:: torchrecord.render_network
 
-.. autofunction:: torchrec.record
+.. autofunction:: torchrecord.record
 
-.. autofunction:: torchrec.make_dot
+.. autofunction:: torchrecord.make_dot
 
 
 Custom `graphviz` styling
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. autoclass:: torchrec.renderer.GraphvizStyler
+.. autoclass:: torchrecord.renderer.GraphvizStyler
     :members:
 
-The `~torchrec.renderer.GraphvizStyler.style_node` and `~torchrec.renderer.GraphvizStyler.style_edge` methods read the properties
-`~torchrec.nodes.BaseNode` objects, so any subclass of `~torchrec.renderer.GraphvizStyler` would need the same.
+The `~torchrecord.renderer.GraphvizStyler.style_node` and `~torchrecord.renderer.GraphvizStyler.style_edge` methods read the properties
+`~torchrecord.nodes.BaseNode` objects, so any subclass of `~torchrecord.renderer.GraphvizStyler` would need the same.
 
-.. autoclass:: torchrec.nodes.TensorNode
-.. autoclass:: torchrec.nodes.OpNode
-.. autoclass:: torchrec.nodes.LayerNode
-.. autoclass:: torchrec.nodes.ParamNode
-.. autoclass:: torchrec.nodes.BaseNode
+.. autoclass:: torchrecord.nodes.TensorNode
+.. autoclass:: torchrecord.nodes.OpNode
+.. autoclass:: torchrecord.nodes.LayerNode
+.. autoclass:: torchrecord.nodes.ParamNode
+.. autoclass:: torchrecord.nodes.BaseNode
 
 Custom Rendering
 ----------------
 
-If you are creating a new format to render information from a `~torchrec.recorder.Recorder`\ , 
-you would need to subclass the following methods in `~torchrec.renderer.base.BaseRenderer`\ , 
-as done in `~torchrec.renderer.GraphvizRenderer`:
+If you are creating a new format to render information from a `~torchrecord.recorder.Recorder`\ , 
+you would need to subclass the following methods in `~torchrecord.renderer.base.BaseRenderer`\ , 
+as done in `~torchrecord.renderer.GraphvizRenderer`:
 
-* `~torchrec.renderer.GraphvizRenderer.render_node`
-* `~torchrec.renderer.GraphvizRenderer.render_recursive_node`
-* `~torchrec.renderer.GraphvizRenderer.render_edge`
+* `~torchrecord.renderer.GraphvizRenderer.render_node`
+* `~torchrecord.renderer.GraphvizRenderer.render_recursive_node`
+* `~torchrecord.renderer.GraphvizRenderer.render_edge`
 
-.. autoclass:: torchrec.renderer.GraphvizRenderer
+.. autoclass:: torchrecord.renderer.GraphvizRenderer
     :members:
 
 
-.. autoclass:: torchrec.renderer.base.BaseRenderer
+.. autoclass:: torchrecord.renderer.base.BaseRenderer
     :members:
 
 
 Custom Recording
 ----------------
 
-Subclassing `~torchrec.recorder.Recorder` should be unnecessary in most cases.
+Subclassing `~torchrecord.recorder.Recorder` should be unnecessary in most cases.
 
-.. autoclass:: torchrec.recorder.Recorder
-.. autofunction:: torchrec.recorder.op_acc
-.. autofunction:: torchrec.recorder.tensor_acc
-.. autofunction:: torchrec.recorder.param_acc
-.. autofunction:: torchrec.recorder.leaf_dummy
-.. autofunction:: torchrec.recorder.prehook
-.. autofunction:: torchrec.recorder.posthook
+.. autoclass:: torchrecord.recorder.Recorder
+.. autofunction:: torchrecord.recorder.op_acc
+.. autofunction:: torchrecord.recorder.tensor_acc
+.. autofunction:: torchrecord.recorder.param_acc
+.. autofunction:: torchrecord.recorder.leaf_dummy
+.. autofunction:: torchrecord.recorder.prehook
+.. autofunction:: torchrecord.recorder.posthook
 
 

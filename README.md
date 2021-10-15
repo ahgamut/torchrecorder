@@ -1,14 +1,14 @@
-`torchrec`
-==========
+`torchrecord`
+=============
 
-![](https://readthedocs.org/projects/pytorchrec/badge/?version=latest&style=flat)
+![](https://readthedocs.org/projects/torchrecord/badge/?version=latest&style=flat)
 
 A small package to record execution graphs of neural networks in PyTorch.
 The package uses hooks and the `grad_fn` attribute to record information.  
 This can be used to generate visualizations at different scope depths. 
 
 Licensed under MIT License.
-View documentation at https://pytorchrec.readthedocs.io/
+View documentation at https://torchrecord.readthedocs.io/
 
 ## Installation
 
@@ -22,7 +22,7 @@ Requirements:
 Install this package:
 
 ```
-$ pip install torchrec
+$ pip install torchrecord
 ```
 
 ## Acknowledgements
@@ -32,5 +32,5 @@ differs from `pytorchviz` as it provides rendering at multiple depths.
 
 Note that for rendering a network during training, you can use TensorBoard and
 [`torch.utils.tensorboard.SummaryWriter.add_graph`](https://pytorch.org/docs/stable/tensorboard.html#torch.utils.tensorboard.writer.SummaryWriter.add_graph),
-which records and renders to a `protobuf` in a single step.  The intended usage of `pytorchrec` is for
+which records and renders to a `protobuf` in a single step.  The intended usage of `torchrecord` is for
 presentation purposes.

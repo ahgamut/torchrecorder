@@ -1,16 +1,16 @@
 from setuptools import setup, find_packages
 
-VERSION = "1.0.1"
+VERSION = "1.0.2"
 
 with open("./README.md") as f:
     long_description = f.read()
 
 setup_info = dict(
-    name="torchrec",
+    name="torchrecord",
     version=VERSION,
     author="Gautham Venkatasubramanian",
     author_email="ahgamut@gmail.com",
-    url="https://github.com/ahgamut/pytorchrec",
+    url="https://github.com/ahgamut/torchrecord",
     description="Record execution graphs of PyTorch neural networks",
     long_description=long_description,
     long_description_content_type="text/markdown",

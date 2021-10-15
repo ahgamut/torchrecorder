@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-    torchrec.helpers
+    torchrecord.helpers
     ~~~~~~~~~~~~~~~~
 
-    Helper functions for torchrec
+    Helper functions for torchrecord
 
     :copyright: (c) 2020 by Gautham Venkatasubramanian.
     :license: see LICENSE for more details.
@@ -111,10 +111,10 @@ def record(net, name, input_shapes, input_data=None):
 
 
 def make_dot(rec, render_depth=256, styler_cls=None, **styler_args):
-    """ Produces Graphviz representation from a `~torchrec.recorder.Recorder` object
+    """ Produces Graphviz representation from a `~torchrecord.recorder.Recorder` object
 
     Args:
-        rec (`~torchrec.recorder.Recorder`\ ):
+        rec (`~torchrecord.recorder.Recorder`\ ):
         render_depth (int):     depth until which nodes should be rendered
         styler_cls:             styler class to instantiate when styling nodes.
                                 If `None`, defaults to `.GraphvizStyler`.
