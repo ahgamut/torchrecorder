@@ -11,149 +11,149 @@
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-899.6955 302,-899.6955 302,4 -4,4"/>
 <text text-anchor="middle" x="149" y="-10.8" font-family="Times,serif" font-size="24.00" fill="#000000">Sample Net at depth = 1</text>
 <g id="clust1" class="cluster">
-<title>cluster_140198796682128</title>
+<title>cluster_140219513415568</title>
 <polygon fill="#ffffff" stroke="#000000" points="8,-135.5391 8,-814.1564 290,-814.1564 290,-135.5391 8,-135.5391"/>
 <text text-anchor="middle" x="149" y="-790.9564" font-family="Times,serif" font-size="24.00" fill="#000000">Sample Net</text>
 </g>
-<!-- 140198796204632 -->
+<!-- 140219513179856 -->
 <g id="node1" class="node">
-<title>140198796204632</title>
+<title>140219513179856</title>
 <polygon fill="#d3d3d3" stroke="#000000" points="222.5,-195.5391 75.5,-195.5391 75.5,-143.5391 222.5,-143.5391 222.5,-195.5391"/>
 <text text-anchor="middle" x="149" y="-175.5391" font-family="Times,serif" font-size="20.00" fill="#000000">my_special_relu</text>
 <text text-anchor="middle" x="149" y="-153.5391" font-family="Times,serif" font-size="20.00" fill="#000000">(ReLU)</text>
 </g>
-<!-- 140198796343560 -->
+<!-- 140219512763344 -->
 <g id="node2" class="node">
-<title>140198796343560</title>
+<title>140219512763344</title>
 <ellipse fill="#add8e6" stroke="#000000" cx="149" cy="-70.7696" rx="50.41" ry="36.5405"/>
 <text text-anchor="middle" x="149" y="-76.7696" font-family="Times,serif" font-size="20.00" fill="#000000">Output</text>
 <text text-anchor="middle" x="149" y="-54.7696" font-family="Times,serif" font-size="20.00" fill="#000000">[1, 1]</text>
 </g>
-<!-- 140198796204632&#45;&gt;140198796343560 -->
+<!-- 140219513179856&#45;&gt;140219512763344 -->
 <g id="edge1" class="edge">
-<title>140198796204632&#45;&gt;140198796343560</title>
+<title>140219513179856&#45;&gt;140219512763344</title>
 <path fill="none" stroke="#000000" d="M149,-143.33C149,-135.5254 149,-126.7221 149,-118.008"/>
 <polygon fill="#000000" stroke="#000000" points="152.5001,-117.8847 149,-107.8847 145.5001,-117.8848 152.5001,-117.8847"/>
 </g>
-<!-- 140198796343056 -->
+<!-- 140219512703056 -->
 <g id="node3" class="node">
-<title>140198796343056</title>
-<ellipse fill="#add8e6" stroke="#000000" cx="149" cy="-268.3087" rx="62.4516" ry="36.5405"/>
-<text text-anchor="middle" x="149" y="-274.3087" font-family="Times,serif" font-size="20.00" fill="#000000">Tensor&#45;5</text>
-<text text-anchor="middle" x="149" y="-252.3087" font-family="Times,serif" font-size="20.00" fill="#000000">[1, 1]</text>
-</g>
-<!-- 140198796343056&#45;&gt;140198796204632 -->
-<g id="edge2" class="edge">
-<title>140198796343056&#45;&gt;140198796204632</title>
-<path fill="none" stroke="#000000" d="M149,-231.5305C149,-223.1235 149,-214.1942 149,-205.8087"/>
-<polygon fill="#000000" stroke="#000000" points="152.5001,-205.5582 149,-195.5583 145.5001,-205.5583 152.5001,-205.5582"/>
-</g>
-<!-- 140198796683248 -->
-<g id="node4" class="node">
-<title>140198796683248</title>
-<polygon fill="#d3d3d3" stroke="#000000" points="261,-772.1564 179,-772.1564 179,-720.1564 261,-720.1564 261,-772.1564"/>
-<text text-anchor="middle" x="220" y="-752.1564" font-family="Times,serif" font-size="20.00" fill="#000000">linear_1</text>
-<text text-anchor="middle" x="220" y="-730.1564" font-family="Times,serif" font-size="20.00" fill="#000000">(Linear)</text>
-</g>
-<!-- 140198796341656 -->
-<g id="node7" class="node">
-<title>140198796341656</title>
+<title>140219512703056</title>
 <ellipse fill="#add8e6" stroke="#000000" cx="220" cy="-647.3869" rx="62.4516" ry="36.5405"/>
 <text text-anchor="middle" x="220" y="-653.3869" font-family="Times,serif" font-size="20.00" fill="#000000">Tensor&#45;2</text>
 <text text-anchor="middle" x="220" y="-631.3869" font-family="Times,serif" font-size="20.00" fill="#000000">[1, 3]</text>
 </g>
-<!-- 140198796683248&#45;&gt;140198796341656 -->
+<!-- 140219512704784 -->
+<g id="node6" class="node">
+<title>140219512704784</title>
+<polygon fill="#ffa500" stroke="#000000" points="211.5,-574.6173 86.5,-574.6173 86.5,-538.6173 211.5,-538.6173 211.5,-574.6173"/>
+<text text-anchor="middle" x="149" y="-551.6173" font-family="Times,serif" font-size="20.00" fill="#000000">CatBackward</text>
+</g>
+<!-- 140219512703056&#45;&gt;140219512704784 -->
+<g id="edge2" class="edge">
+<title>140219512703056&#45;&gt;140219512704784</title>
+<path fill="none" stroke="#000000" d="M193.7639,-613.8455C185.7591,-603.6118 177.0787,-592.5143 169.5113,-582.8398"/>
+<polygon fill="#000000" stroke="#000000" points="172.1106,-580.482 163.1926,-574.7618 166.5969,-584.7948 172.1106,-580.482"/>
+</g>
+<!-- 140219513417680 -->
+<g id="node4" class="node">
+<title>140219513417680</title>
+<polygon fill="#d3d3d3" stroke="#000000" points="261,-772.1564 179,-772.1564 179,-720.1564 261,-720.1564 261,-772.1564"/>
+<text text-anchor="middle" x="220" y="-752.1564" font-family="Times,serif" font-size="20.00" fill="#000000">linear_1</text>
+<text text-anchor="middle" x="220" y="-730.1564" font-family="Times,serif" font-size="20.00" fill="#000000">(Linear)</text>
+</g>
+<!-- 140219513417680&#45;&gt;140219512703056 -->
 <g id="edge3" class="edge">
-<title>140198796683248&#45;&gt;140198796341656</title>
+<title>140219513417680&#45;&gt;140219512703056</title>
 <path fill="none" stroke="#000000" d="M220,-719.9473C220,-712.1427 220,-703.3394 220,-694.6254"/>
 <polygon fill="#000000" stroke="#000000" points="223.5001,-694.502 220,-684.502 216.5001,-694.5021 223.5001,-694.502"/>
 </g>
-<!-- 140198796684816 -->
+<!-- 140219512703952 -->
 <g id="node5" class="node">
-<title>140198796684816</title>
-<polygon fill="#d3d3d3" stroke="#000000" points="119,-772.1564 37,-772.1564 37,-720.1564 119,-720.1564 119,-772.1564"/>
-<text text-anchor="middle" x="78" y="-752.1564" font-family="Times,serif" font-size="20.00" fill="#000000">linear_2</text>
-<text text-anchor="middle" x="78" y="-730.1564" font-family="Times,serif" font-size="20.00" fill="#000000">(Linear)</text>
-</g>
-<!-- 140198796342272 -->
-<g id="node6" class="node">
-<title>140198796342272</title>
+<title>140219512703952</title>
 <ellipse fill="#add8e6" stroke="#000000" cx="78" cy="-647.3869" rx="62.4516" ry="36.5405"/>
 <text text-anchor="middle" x="78" y="-653.3869" font-family="Times,serif" font-size="20.00" fill="#000000">Tensor&#45;3</text>
 <text text-anchor="middle" x="78" y="-631.3869" font-family="Times,serif" font-size="20.00" fill="#000000">[1, 3]</text>
 </g>
-<!-- 140198796684816&#45;&gt;140198796342272 -->
+<!-- 140219512703952&#45;&gt;140219512704784 -->
 <g id="edge4" class="edge">
-<title>140198796684816&#45;&gt;140198796342272</title>
-<path fill="none" stroke="#000000" d="M78,-719.9473C78,-712.1427 78,-703.3394 78,-694.6254"/>
-<polygon fill="#000000" stroke="#000000" points="81.5001,-694.502 78,-684.502 74.5001,-694.5021 81.5001,-694.502"/>
-</g>
-<!-- 140198796342776 -->
-<g id="node10" class="node">
-<title>140198796342776</title>
-<polygon fill="#ffa500" stroke="#000000" points="211.5,-574.6173 86.5,-574.6173 86.5,-538.6173 211.5,-538.6173 211.5,-574.6173"/>
-<text text-anchor="middle" x="149" y="-551.6173" font-family="Times,serif" font-size="20.00" fill="#000000">CatBackward</text>
-</g>
-<!-- 140198796342272&#45;&gt;140198796342776 -->
-<g id="edge5" class="edge">
-<title>140198796342272&#45;&gt;140198796342776</title>
+<title>140219512703952&#45;&gt;140219512704784</title>
 <path fill="none" stroke="#000000" d="M104.2361,-613.8455C112.2409,-603.6118 120.9213,-592.5143 128.4887,-582.8398"/>
 <polygon fill="#000000" stroke="#000000" points="131.4031,-584.7948 134.8074,-574.7618 125.8894,-580.482 131.4031,-584.7948"/>
 </g>
-<!-- 140198796341656&#45;&gt;140198796342776 -->
-<g id="edge6" class="edge">
-<title>140198796341656&#45;&gt;140198796342776</title>
-<path fill="none" stroke="#000000" d="M193.7639,-613.8455C185.7591,-603.6118 177.0787,-592.5143 169.5113,-582.8398"/>
-<polygon fill="#000000" stroke="#000000" points="172.1106,-580.482 163.1926,-574.7618 166.5969,-584.7948 172.1106,-580.482"/>
-</g>
-<!-- 140198796342888 -->
-<g id="node8" class="node">
-<title>140198796342888</title>
+<!-- 140219512704912 -->
+<g id="node7" class="node">
+<title>140219512704912</title>
 <ellipse fill="#add8e6" stroke="#000000" cx="149" cy="-465.8478" rx="62.4516" ry="36.5405"/>
 <text text-anchor="middle" x="149" y="-471.8478" font-family="Times,serif" font-size="20.00" fill="#000000">Tensor&#45;4</text>
 <text text-anchor="middle" x="149" y="-449.8478" font-family="Times,serif" font-size="20.00" fill="#000000">[1, 6]</text>
 </g>
-<!-- 140198796202952 -->
-<g id="node9" class="node">
-<title>140198796202952</title>
+<!-- 140219512704784&#45;&gt;140219512704912 -->
+<g id="edge5" class="edge">
+<title>140219512704784&#45;&gt;140219512704912</title>
+<path fill="none" stroke="#000000" d="M149,-538.2487C149,-530.8717 149,-521.9973 149,-513.0293"/>
+<polygon fill="#000000" stroke="#000000" points="152.5001,-512.939 149,-502.9391 145.5001,-512.9391 152.5001,-512.939"/>
+</g>
+<!-- 140219513192592 -->
+<g id="node10" class="node">
+<title>140219513192592</title>
 <polygon fill="#d3d3d3" stroke="#000000" points="190,-393.0782 108,-393.0782 108,-341.0782 190,-341.0782 190,-393.0782"/>
 <text text-anchor="middle" x="149" y="-373.0782" font-family="Times,serif" font-size="20.00" fill="#000000">linear_3</text>
 <text text-anchor="middle" x="149" y="-351.0782" font-family="Times,serif" font-size="20.00" fill="#000000">(Linear)</text>
 </g>
-<!-- 140198796342888&#45;&gt;140198796202952 -->
-<g id="edge7" class="edge">
-<title>140198796342888&#45;&gt;140198796202952</title>
+<!-- 140219512704912&#45;&gt;140219513192592 -->
+<g id="edge6" class="edge">
+<title>140219512704912&#45;&gt;140219513192592</title>
 <path fill="none" stroke="#000000" d="M149,-429.0696C149,-420.6626 149,-411.7333 149,-403.3478"/>
 <polygon fill="#000000" stroke="#000000" points="152.5001,-403.0973 149,-393.0974 145.5001,-403.0974 152.5001,-403.0973"/>
 </g>
-<!-- 140198796202952&#45;&gt;140198796343056 -->
+<!-- 140219512943696 -->
+<g id="node8" class="node">
+<title>140219512943696</title>
+<polygon fill="#d3d3d3" stroke="#000000" points="119,-772.1564 37,-772.1564 37,-720.1564 119,-720.1564 119,-772.1564"/>
+<text text-anchor="middle" x="78" y="-752.1564" font-family="Times,serif" font-size="20.00" fill="#000000">linear_2</text>
+<text text-anchor="middle" x="78" y="-730.1564" font-family="Times,serif" font-size="20.00" fill="#000000">(Linear)</text>
+</g>
+<!-- 140219512943696&#45;&gt;140219512703952 -->
+<g id="edge7" class="edge">
+<title>140219512943696&#45;&gt;140219512703952</title>
+<path fill="none" stroke="#000000" d="M78,-719.9473C78,-712.1427 78,-703.3394 78,-694.6254"/>
+<polygon fill="#000000" stroke="#000000" points="81.5001,-694.502 78,-684.502 74.5001,-694.5021 81.5001,-694.502"/>
+</g>
+<!-- 140219512762576 -->
+<g id="node9" class="node">
+<title>140219512762576</title>
+<ellipse fill="#add8e6" stroke="#000000" cx="149" cy="-268.3087" rx="62.4516" ry="36.5405"/>
+<text text-anchor="middle" x="149" y="-274.3087" font-family="Times,serif" font-size="20.00" fill="#000000">Tensor&#45;5</text>
+<text text-anchor="middle" x="149" y="-252.3087" font-family="Times,serif" font-size="20.00" fill="#000000">[1, 1]</text>
+</g>
+<!-- 140219512762576&#45;&gt;140219513179856 -->
 <g id="edge8" class="edge">
-<title>140198796202952&#45;&gt;140198796343056</title>
+<title>140219512762576&#45;&gt;140219513179856</title>
+<path fill="none" stroke="#000000" d="M149,-231.5305C149,-223.1235 149,-214.1942 149,-205.8087"/>
+<polygon fill="#000000" stroke="#000000" points="152.5001,-205.5582 149,-195.5583 145.5001,-205.5583 152.5001,-205.5582"/>
+</g>
+<!-- 140219513192592&#45;&gt;140219512762576 -->
+<g id="edge9" class="edge">
+<title>140219513192592&#45;&gt;140219512762576</title>
 <path fill="none" stroke="#000000" d="M149,-340.8691C149,-333.0645 149,-324.2612 149,-315.5472"/>
 <polygon fill="#000000" stroke="#000000" points="152.5001,-315.4238 149,-305.4238 145.5001,-315.4239 152.5001,-315.4238"/>
 </g>
-<!-- 140198796342776&#45;&gt;140198796342888 -->
-<g id="edge9" class="edge">
-<title>140198796342776&#45;&gt;140198796342888</title>
-<path fill="none" stroke="#000000" d="M149,-538.2487C149,-530.8717 149,-521.9973 149,-513.0293"/>
-<polygon fill="#000000" stroke="#000000" points="152.5001,-512.939 149,-502.9391 145.5001,-512.9391 152.5001,-512.939"/>
-</g>
-<!-- 140198796235608 -->
+<!-- 140219513404688 -->
 <g id="node11" class="node">
-<title>140198796235608</title>
+<title>140219513404688</title>
 <ellipse fill="#add8e6" stroke="#000000" cx="149" cy="-858.926" rx="42.3529" ry="36.5405"/>
 <text text-anchor="middle" x="149" y="-864.926" font-family="Times,serif" font-size="20.00" fill="#000000">Input</text>
 <text text-anchor="middle" x="149" y="-842.926" font-family="Times,serif" font-size="20.00" fill="#000000">[1, 3]</text>
 </g>
-<!-- 140198796235608&#45;&gt;140198796683248 -->
-<g id="edge11" class="edge">
-<title>140198796235608&#45;&gt;140198796683248</title>
+<!-- 140219513404688&#45;&gt;140219513417680 -->
+<g id="edge10" class="edge">
+<title>140219513404688&#45;&gt;140219513417680</title>
 <path fill="none" stroke="#000000" d="M169.3458,-826.6107C178.3044,-812.3817 188.8482,-795.635 197.9899,-781.1152"/>
 <polygon fill="#000000" stroke="#000000" points="201.1079,-782.7319 203.474,-772.4047 195.1842,-779.0023 201.1079,-782.7319"/>
 </g>
-<!-- 140198796235608&#45;&gt;140198796684816 -->
-<g id="edge10" class="edge">
-<title>140198796235608&#45;&gt;140198796684816</title>
+<!-- 140219513404688&#45;&gt;140219512943696 -->
+<g id="edge11" class="edge">
+<title>140219513404688&#45;&gt;140219512943696</title>
 <path fill="none" stroke="#000000" d="M128.6542,-826.6107C119.6956,-812.3817 109.1518,-795.635 100.0101,-781.1152"/>
 <polygon fill="#000000" stroke="#000000" points="102.8158,-779.0023 94.526,-772.4047 96.8921,-782.7319 102.8158,-779.0023"/>
 </g>
