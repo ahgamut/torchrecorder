@@ -344,7 +344,8 @@ def posthook(module, inputs, outputs, rec, node):
             # it has to be a dummy op
             rec.nodes[gf].parent = node.parent
             rec.nodes[gf].depth -= 1
-            node.subnets.remove(rec.nodes[gf].fn)
+            if rec.nodes[gf].fn in node.subnets:
+                node.subnets.remove(rec.nodes[gf].fn)
             new_outputs.append(x)
     return new_outputs[0] if is_singleton else tuple(new_outputs)
 
